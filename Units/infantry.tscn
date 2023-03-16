@@ -1,0 +1,91 @@
+[gd_scene load_steps=8 format=3 uid="uid://daqewio6ajv7n"]
+
+[ext_resource type="Script" path="res://Units/UnitScript.gd" id="1_gvrqy"]
+[ext_resource type="Texture2D" uid="uid://b2l4vl8blfhng" path="res://Art/Infantry.png" id="1_ssf7h"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_puw0v"]
+size = Vector2(24, 48)
+
+[sub_resource type="Animation" id="Animation_860sq"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2i(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_5kfxv"]
+resource_name = "attack"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector2i(3, 0), Vector2i(4, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_lp5vk"]
+resource_name = "walk"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector2i(1, 0), Vector2i(2, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_adwys"]
+_data = {
+"RESET": SubResource("Animation_860sq"),
+"attack": SubResource("Animation_5kfxv"),
+"walk": SubResource("Animation_lp5vk")
+}
+
+[node name="Infantry" type="RigidBody2D" groups=["infantry", "team"]]
+gravity_scale = 0.0
+lock_rotation = true
+script = ExtResource("1_gvrqy")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_ssf7h")
+hframes = 5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 4)
+shape = SubResource("RectangleShape2D_puw0v")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_adwys")
+}
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+avoidance_enabled = true
+radius = 64.0
+debug_enabled = true
+debug_use_custom = true
+debug_path_custom_color = Color(0.352941, 0.639216, 0.756863, 1)
+
+[node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="."]
+radius = 64.0
